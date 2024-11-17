@@ -17,8 +17,7 @@ struct Cli {
     copy: bool,
 }
 
-#[tokio::main]
-async fn main() -> io::Result<()> {
+fn main() -> io::Result<()> {
     // Parse command-line arguments
     let cli = Cli::parse();
 
