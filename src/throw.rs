@@ -18,11 +18,10 @@ struct Cli {
 }
 
 fn main() -> io::Result<()> {
-    // Parse command-line arguments
     let cli = Cli::parse();
 
     // Connect to the catcher via Unix Domain Socket
-    let socket_path = "/tmp/yeetyeetyeet"; // Ensure this matches the socket path in `catch.rs`
+    let socket_path = "/tmp/yeetyeetyeet";
     match UnixStream::connect(socket_path) {
         Ok(mut stream) => {
             for filename in cli.files {
