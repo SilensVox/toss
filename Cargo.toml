@@ -1,12 +1,12 @@
 [package]
-name = "yeet"
+name = "toss"
 version = "1.0.0"
 edition = "2021"
 authors = [ "scientiac < iac@scientiac.space >" ]
 description = "A throw-catch style move and copy program."
 readme = "README.md"
-repository = "https://github.com/scientaic/yeet"
-homepage = "https://github.com/scienaiac/yeet.git"
+repository = "https://github.com/scientaic/toss"
+homepage = "https://github.com/scienaiac/toss.git"
 license = "GPL-3.0"
 
 [dependencies]
