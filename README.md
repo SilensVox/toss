@@ -1,2 +1,2 @@
 # yeet
-throw and catch style moveing and copying program
+throw and catch style moving and copying program
