@@ -1,7 +1,13 @@
 [package]
 name = "yeet"
-version = "0.1.0"
+version = "1.0.0"
 edition = "2021"
+authors = [ "scientiac < iac@scientiac.space >" ]
+description = "A throw-catch style move and copy program."
+readme = "README.md"
+repository = "https://github.com/scientaic/yeet"
+homepage = "https://github.com/scienaiac/yeet.git"
+license = "GPL-3.0"
 
 [dependencies]
 clap = { version = "4.5.20", features = ["derive"] }
