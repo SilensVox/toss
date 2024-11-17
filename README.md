@@ -1,4 +1,4 @@
-# yeet
+# toss
 throw and catch style moving and copying program
 
 ## Why?
