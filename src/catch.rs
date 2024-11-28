@@ -14,6 +14,10 @@ struct Args {
     #[arg(short, long)]
     server: bool,
 
+    /// Execute tasks quietly
+    #[arg(short, long)]
+    quiet: bool,
+
     /// Set the destination directory for the files
     destination: Option<String>,
 }
@@ -21,6 +25,7 @@ struct Args {
 fn handle_connection(
     stream: std::os::unix::net::UnixStream,
     destination_path: Arc<PathBuf>,
+    quiet: bool,
 ) -> io::Result<()> {
     let reader = BufReader::new(stream);
 
@@ -36,9 +41,9 @@ fn handle_connection(
                     source.file_name().unwrap_or_else(|| std::ffi::OsStr::new("unknown")),
                 );
 
-                let command = match action {
-                    "copy" => "cp",
-                    "move" => "mv",
+                let (command, args) = match action {
+                    "copy" => ("cp", vec!["-r", source_path]),
+                    "move" => ("mv", vec![source_path]),
                     _ => {
                         eprintln!("Invalid action: {}", action);
                         continue;
@@ -46,7 +51,7 @@ fn handle_connection(
                 };
 
                 let output = Command::new(command)
-                    .arg(source_path)
+                    .args(args)
                     .arg(&destination)
                     .output();
 
@@ -60,12 +65,14 @@ fn handle_connection(
                                 String::from_utf8_lossy(&output.stderr)
                             );
                         } else {
-                            println!(
-                                "{} '{}' -> '{}'",
-                                if command == "cp" { "Copied" } else { "Moved" },
-                                source_path,
-                                destination.display()
-                            );
+                            if !quiet {
+                              println!(
+                                  "{} '{}' -> '{}'",
+                                  if command == "cp" { "Copied" } else { "Moved" },
+                                  source_path,
+                                  destination.display()
+                              );
+                            }
                         }
                     }
                     Err(e) => {
@@ -104,7 +111,9 @@ fn main() -> io::Result<()> {
     }
 
     let listener = UnixListener::bind(socket_path)?;
-    println!("Waiting...");
+    if !args.quiet {
+      println!("Waiting...");
+    }
 
     let destination_path = Arc::new(destination_path);
 
@@ -115,7 +124,7 @@ fn main() -> io::Result<()> {
                 Ok(stream) => {
                     let destination_path = Arc::clone(&destination_path);
                     thread::spawn(move || {
-                        if let Err(e) = handle_connection(stream, destination_path) {
+                        if let Err(e) = handle_connection(stream, destination_path, args.quiet) {
                             eprintln!("Error handling connection: {}", e);
                         }
                     });
@@ -131,7 +140,7 @@ fn main() -> io::Result<()> {
             Ok((stream, _)) => {
                 let destination_path = Arc::clone(&destination_path);
                 let handle = thread::spawn(move || {
-                    handle_connection(stream, destination_path).unwrap_or_else(|e| {
+                    handle_connection(stream, destination_path, args.quiet).unwrap_or_else(|e| {
                         eprintln!("Error handling connection: {}", e);
                     });
                 });
