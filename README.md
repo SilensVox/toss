@@ -13,12 +13,12 @@ What I thought is.. why not just run a catcher in a destination path, and throw 
 First run `catch` in the destination directory, then run `throw <path>`
 > Run `--help` for both programs for arguments and options.
 
-```
+```sh
 # catch:
 catch
 ```
 
-```
+```sh
 # throw
 throw <path>
 ```
@@ -27,7 +27,7 @@ throw <path>
 
 ## For Normal Distros
 
-```
+```sh
 # should be good for most systems
 cargo install toss
 ```
