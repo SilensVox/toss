@@ -1,7 +1,11 @@
 # toss
 This was forked by pragyan
+<<<<<<< HEAD
 bla bla
 
+=======
+bla bla bla
+>>>>>>> df295cf1d971d56fffddeb1d91b1459b48f00198
 throw and catch style moving and copying program
 
 ## Why?
